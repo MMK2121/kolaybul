@@ -1,6 +1,6 @@
 ## Kolay Bul API Project
 
-### API
+### API 
 
 ![image](https://github.com/user-attachments/assets/8e61d52e-4e5c-4a1b-a67d-ef23dddb8c0b)
 
@@ -12,9 +12,9 @@
 
 Video : https://drive.google.com/file/d/1WKSrbfV2PVnXH1wb2EdYOc7BvjxU29yI/view
 
-## **Here is the design, my assumptions, and issues that I encountered**
+## **Here is the design, my assumptions, and issues that I encountered** ☝🏻
 
-### **1. Design**
+### **1. Design** ✨
 The project is designed as a **NestJS application** to implement a scalable, modular, and maintainable API. Below are the key design considerations:
 
 - **Modular Architecture**:  
@@ -37,7 +37,7 @@ The project is designed as a **NestJS application** to implement a scalable, mod
 
 ---
 
-### **2. Assumptions**
+### **2. Assumptions** 🤔
 Here are the assumptions made during the development:
 
 - **Authentication Flow**:  
@@ -56,7 +56,7 @@ Here are the assumptions made during the development:
 
 ---
 
-### **3. Issues Encountered**
+### **3. Issues Encountered** 💪🏻
 Several challenges were encountered during the development and deployment process:
 
 - **Database Connection**:  
