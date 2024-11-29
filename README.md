@@ -12,7 +12,70 @@
 
 Video : https://drive.google.com/file/d/1WKSrbfV2PVnXH1wb2EdYOc7BvjxU29yI/view
 
-# If  you want to use download this repo for your local please read below and contact with me for .env file
+## **Here is the design, my assumptions, and issues that I encountered**
+
+### **1. Design**
+The project is designed as a **NestJS application** to implement a scalable, modular, and maintainable API. Below are the key design considerations:
+
+- **Modular Architecture**:  
+  The application is divided into feature modules to maintain separation of concerns. For instance:
+  - `AuthModule`: Handles user authentication and authorization using JWT.
+  - `ProductModule`: Manages CRUD operations for products.
+  - `UserModule`: Manages user-related operations.
+  
+- **Swagger API Documentation**:  
+  Integrated Swagger to provide an interactive API documentation, making it easier for developers to understand and test the endpoints.
+
+- **Database**:  
+  Utilized **Prisma ORM** to interact with the database. Prisma was chosen for its type-safety, ease of migrations, and compatibility with NestJS.
+
+- **Validation and Error Handling**:  
+  Used `class-validator` and `class-transformer` to ensure data validation at the DTO level. Global error handling is implemented using NestJS's exception filters.
+
+- **Environment Configuration**:  
+  Used `@nestjs/config` to manage environment variables, ensuring flexibility for different environments (development, staging, production).
+
+---
+
+### **2. Assumptions**
+Here are the assumptions made during the development:
+
+- **Authentication Flow**:  
+  The application assumes users will authenticate using JWT tokens, and a secure mechanism for token storage is handled on the frontend.
+
+- **Database Schema**:  
+  The database schema is designed to accommodate typical CRUD operations for users and products. It assumes:
+  - Each product has a unique identifier.
+  - Users can have roles (e.g., admin, user) to restrict access to specific routes.
+  
+- **Deployment Environment**:  
+  Assumes the application will be deployed in a serverless environment like **Vercel**, and build commands are configured accordingly.
+
+- **Request Rates and Scalability**:  
+  Assumes a moderate level of concurrent requests; thus, no advanced caching or load-balancing mechanisms were implemented at this stage.
+
+---
+
+### **3. Issues Encountered**
+Several challenges were encountered during the development and deployment process:
+
+- **Database Connection**:  
+  Initially faced issues with configuring Prisma for serverless environments. This was resolved by using a connection pooling solution compatible with serverless platforms.
+
+- **Vercel Deployment**:  
+  Encountered the error `No Output Directory found` during the build process. This was resolved by explicitly setting the output directory in the `vercel.json` configuration file.
+
+- **Swagger Integration**:  
+  Configuring Swagger for seamless API documentation took extra time as some routes required custom decorators for better documentation clarity.
+
+- **Dynamic Configuration**:  
+  Setting up environment variables in Vercel required careful attention to ensure secrets like `DATABASE_URL` and `JWT_SECRET` were securely stored and correctly referenced.
+
+- **Error Handling and Validation**:  
+  Implementing robust error handling while maintaining clean code proved challenging, but global exception filters and DTO validation resolved this issue.
+
+
+# If  you want to use download this repo for your local please read below and contact with me for .env file 💪🏻👌🏻
 
 ## Project setup
 
@@ -45,43 +108,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
