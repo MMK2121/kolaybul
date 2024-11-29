@@ -75,7 +75,7 @@ Several challenges were encountered during the development and deployment proces
   Implementing robust error handling while maintaining clean code proved challenging, but global exception filters and DTO validation resolved this issue.
 
 
-# If  you want to use download this repo for your local please read below and contact with me for .env file 💪🏻👌🏻
+# If  you want to download this repo for your local please read below and contact with me for .env file 💪🏻👌🏻
 
 ## Project setup
 
