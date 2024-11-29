@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  hash        String
+  firstName   String?
+  lastName    String?
+  role        Role      @default(GUEST)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  listings    Listing[] @relation("HostListings")
+  bookings    Booking[] @relation("GuestBookings")
+  reviews     Review[]  @relation("AuthorReviews") 
+  @@map("users")
+}
+
+model Listing {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  noOfPeople  Int
+  country     String
+  city        String
+  price       Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  host        User      @relation("HostListings", fields: [hostId], references: [id])
+  hostId      Int
+  bookings    Booking[] @relation("ListingBookings") 
+  reviews     Review[]  @relation("ListingReviews") 
+}
+
+model Booking {
+  id            Int       @id @default(autoincrement())
+  startDate     DateTime
+  endDate       DateTime
+  guest         User      @relation("GuestBookings", fields: [guestId], references: [id])
+  guestId       Int
+  listing       Listing   @relation("ListingBookings", fields: [listingId], references: [id]) // Doğru ilişki
+  listingId     Int
+  reviews       Review[]  @relation("BookingReviews") 
+  createdAt     DateTime  @default(now())
+  numberOfGuests Int
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  rating      Int       @default(0) 
+  comment     String
+  createdAt   DateTime  @default(now())
+  booking     Booking   @relation("BookingReviews", fields: [bookingId], references: [id])
+  bookingId   Int
+  author      User      @relation("AuthorReviews", fields: [authorId], references: [id]) 
+  authorId    Int
+  listing     Listing   @relation("ListingReviews", fields: [listingId], references: [id]) 
+  listingId   Int
+}
+
+enum Role {
+  HOST
+  GUEST
+  ADMIN
+}
+
+
