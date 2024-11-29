@@ -1,7 +1,18 @@
 ## Kolay Bul API Project
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### API
+
+![image](https://github.com/user-attachments/assets/8e61d52e-4e5c-4a1b-a67d-ef23dddb8c0b)
+
+### DATA MODEL
+
+![image](https://github.com/user-attachments/assets/176ad1bb-4705-4af6-ad05-289b1a38862c)
+
+
+
+Video : https://drive.google.com/file/d/1WKSrbfV2PVnXH1wb2EdYOc7BvjxU29yI/view
+
+# If  you want to use download this repo for your local please read below and contact with me for .env file
 
 ## Project setup
 
