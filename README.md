@@ -1,110 +1,170 @@
-## Kolay Bul API Project
+## Kolay Bul Microservices Project
 
-### API 
+### Overview
 
-![image](https://github.com/user-attachments/assets/8e61d52e-4e5c-4a1b-a67d-ef23dddb8c0b)
+This project is restructured as a **microservices architecture** to enhance scalability, modularity, and maintainability. Each feature is developed as an independent service with its own responsibilities. Below are the updated services and architecture details:
 
-### DATA MODEL
+---
+video: https://drive.google.com/file/d/1dVgEe-SKsRfSAkdF6P6jY_Z37L_m-j9E/view?usp=drive_link
+### Microservices
 
-![image](https://github.com/user-attachments/assets/176ad1bb-4705-4af6-ad05-289b1a38862c)
+#### 1. **Auth Service**
 
+- **Responsibilities**:
+  - Handles user authentication and authorization.
+  - Provides JWT-based authentication.
+  - Manages user roles and permissions.
+- **Endpoints**:
+  - `POST /auth/signin`: Authenticates users and provides a JWT token.
+  - `POST /auth/signup`: Registers a new user.
+- **Communication**:
+  - Listens on a dedicated TCP port for inter-service communication.
 
+#### 2. **User Service**
 
-Video : https://drive.google.com/file/d/1WKSrbfV2PVnXH1wb2EdYOc7BvjxU29yI/view
+- **Responsibilities**:
+  - Manages user-related operation for retrieval.
+  - Stores user data securely.
+- **Endpoints**:
+  - `GET /user/:id`: Retrieves user details by ID.
+- **Communication**:
+  - Listens for API Gateway requests and communicates with Auth Service for secure access.
 
-## **Here is the design, my assumptions, and issues that I encountered** ☝🏻
+#### 3. **Listing Service**
 
-### **1. Design** ✨
-The project is designed as a **NestJS application** to implement a scalable, modular, and maintainable API. Below are the key design considerations:
+- **Responsibilities**:
+  - Manages create and get operations for product listings.
+  - Provides search functionality for products.
+- **Endpoints**:
+  - `POST /listings`: Creates a new product listing.
+  - `GET /listings`: Retrieves all product listings.
+  - `GET /listings/:id`: Retrieves a specific product listing by ID.
+- **Communication**:
+  - Handles inter-service queries from API Gateway.
 
-- **Modular Architecture**:  
-  The application is divided into feature modules to maintain separation of concerns. For instance:
-  - `AuthModule`: Handles user authentication and authorization using JWT.
-  - `ProductModule`: Manages CRUD operations for products.
-  - `UserModule`: Manages user-related operations.
-  
-- **Swagger API Documentation**:  
-  Integrated Swagger to provide an interactive API documentation, making it easier for developers to understand and test the endpoints.
+#### 4. **Review Service**
 
-- **Database**:  
-  Utilized **Prisma ORM** to interact with the database. Prisma was chosen for its type-safety, ease of migrations, and compatibility with NestJS.
+- **Responsibilities**:
+  - Manages reviews for booking.
+  - Ensures that only authenticated users can leave reviews.
+- **Endpoints**:
+  - `POST /reviews`: Creates a new review.
+  - `GET /reviews/`: Retrieves all reviews.
+- **Communication**:
+  - Collaborates with Auth Service for user verification.
 
-- **Validation and Error Handling**:  
-  Used `class-validator` and `class-transformer` to ensure data validation at the DTO level. Global error handling is implemented using NestJS's exception filters.
+#### 5. **Booking Service**
 
-- **Environment Configuration**:  
-  Used `@nestjs/config` to manage environment variables, ensuring flexibility for different environments (development, staging, production).
+- **Responsibilities**:
+  - Handles bookings for listed products.
+- **Endpoints**:
+  - `POST /bookings`: Creates a new booking.
+  - `GET /bookings/:id`: Retrieves booking details.
+- **Communication**:
+  - Communicates with Product Listing Service to verify availability.
+
+#### 6. **API Gateway**
+
+- **Responsibilities**:
+  - Serves as a single entry point for external clients.
+  - Routes requests to the appropriate microservices.
+  - Implements authentication.
+- **Features**:
+  - Consolidates responses from multiple services.
 
 ---
 
-### **2. Assumptions** 🤔
-Here are the assumptions made during the development:
+### Architecture Design
 
-- **Authentication Flow**:  
-  The application assumes users will authenticate using JWT tokens, and a secure mechanism for token storage is handled on the frontend.
+- **Communication Protocol**:
 
-- **Database Schema**:  
-  The database schema is designed to accommodate typical CRUD operations for users and products. It assumes:
-  - Each product has a unique identifier.
-  - Users can have roles (e.g., admin, user) to restrict access to specific routes.
-  
-- **Deployment Environment**:  
-  Assumes the application will be deployed in a serverless environment like **Vercel**, and build commands are configured accordingly.
+  - Inter-service communication uses TCP with NestJS’s microservice framework.
+  - API Gateway uses HTTP/REST to communicate with external clients.
 
-- **Request Rates and Scalability**:  
-  Assumes a moderate level of concurrent requests; thus, no advanced caching or load-balancing mechanisms were implemented at this stage.
+- **Database**:
+
+  - Prisma ORM is used for database interactions across services.
+
+- **Authentication**:
+
+  - Auth Service issues JWT tokens.
+  - Other services validate the tokens via the Auth Service.
+
+- **Environment Configuration**:
+
+  - Managed with `@nestjs/config`.
+  - Secrets such as `JWT_SECRET` and `DATABASE_URL` are securely stored in environment variables.
 
 ---
 
-### **3. Issues Encountered** 💪🏻
-Several challenges were encountered during the development and deployment process:
+### Assumptions
 
-- **Database Connection**:  
-  Initially faced issues with configuring Prisma for serverless environments. This was resolved by using a connection pooling solution compatible with serverless platforms.
+- Each microservice is deployed independently.
+- Communication between services is secure and uses token-based authentication.
+- The project is expected to handle moderate traffic; advanced load balancing or caching can be added later.
 
-- **Vercel Deployment**:  
-  Encountered the error `No Output Directory found` during the build process. This was resolved by explicitly setting the output directory in the `vercel.json` configuration file.
+---
 
-- **Swagger Integration**:  
-  Configuring Swagger for seamless API documentation took extra time as some routes required custom decorators for better documentation clarity.
+### Issues Encountered
 
-- **Dynamic Configuration**:  
-  Setting up environment variables in Vercel required careful attention to ensure secrets like `DATABASE_URL` and `JWT_SECRET` were securely stored and correctly referenced.
+#### **1. Inter-service Communication**
 
-- **Error Handling and Validation**:  
-  Implementing robust error handling while maintaining clean code proved challenging, but global exception filters and DTO validation resolved this issue.
+- Initial difficulties with TCP-based communication between services were resolved by correctly configuring hostnames and ports in Docker Compose.
 
+---
 
-# If  you want to download this repo for your local please read below and contact with me for .env file 💪🏻👌🏻
+#### **2. Docker Microservices Port Communication**
 
-## Project setup
+- I talked about this in the video. I faced this issue two days in a row. The build correctly runs and services are running but I had a deadline so I never came up with a solution about microservices ports error. I planned in the finals this microservices ports are runs correctly no matter what 😎 But the api gateway runs no matter what.
+
+---
+
+### Project Setup
+
+#### 1. Clone the Repository
+
+```bash
+$ git clone <repository-url>
+```
+
+#### 2. Install Dependencies
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+#### 3. Setup Environment Variables
+
+Contact the project maintainer to get the `.env` files for each microservice.
+
+#### 4. Start the Services
+
+Using Docker Compose:
 
 ```bash
-# development
-$ npm run start
+## This just deploy for Api gateway. Like I mentioned and applied in the video.
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ docker-compose up --build
 ```
 
-## Run tests
+Start individually:
 
 ```bash
-# unit tests
-$ npm run test
+# Auth Service
+$ nest start start:auth --watch
 
-# e2e tests
-$ npm run test:e2e
+# User Service
+$ nest start start:user --watch
 
-# test coverage
-$ npm run test:cov
+# Product Listing Service
+$ nest start start:listing --watch
+
+# Review Service
+$ nest start start:review --watch
+
+# Booking Service
+$ nest start start:booking --watch
+
+# API Gateway
+$ nest start --watch
 ```
