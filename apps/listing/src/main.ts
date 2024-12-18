@@ -7,7 +7,7 @@ async function bootstrap() {
     ListingAppModule,
     {
       transport: Transport.TCP,
-      options: { host:"host.docker.internal",port:3004 },
+      options: {port:3004 },
     },
   );
   await app.listen();

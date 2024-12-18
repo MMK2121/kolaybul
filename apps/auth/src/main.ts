@@ -7,7 +7,7 @@ async function bootstrap() {
     AuthAppModule,
     {
       transport: Transport.TCP,
-      options: { host:"host.docker.internal",port:3001 },
+      options: {port:3001 },
     },
   );
   await app.listen();

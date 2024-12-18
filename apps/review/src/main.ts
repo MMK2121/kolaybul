@@ -7,7 +7,7 @@ async function bootstrap() {
     ReviewAppModule,
     {
       transport: Transport.TCP,
-      options: { host:"host.docker.internal",port:3003 },
+      options: {port:3003 },
     },
   );
   await app.listen();

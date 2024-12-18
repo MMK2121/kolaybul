@@ -7,7 +7,7 @@ async function bootstrap() {
     BookingAppModule,
     {
       transport: Transport.TCP,
-      options: { host:"host.docker.internal",port:3005 },
+      options: {port:3005 },
     },
   );
   await app.listen();

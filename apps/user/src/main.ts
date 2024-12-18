@@ -7,7 +7,7 @@ async function bootstrap() {
     UserAppModule,
     {
       transport: Transport.TCP,
-      options: { host:"host.docker.internal",port:3002 },
+      options: {port:3002 },
     },
   );
   await app.listen();

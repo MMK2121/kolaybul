@@ -9,7 +9,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       {
         name: 'REVIEW_SERVICE',
         transport: Transport.TCP,
-        options: { host:"host.docker.internal",port:3003 },
+        options: {port:3003 },
 
       },
     ]),
